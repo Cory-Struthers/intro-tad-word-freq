@@ -1673,6 +1673,12 @@ are used most frequently by consumers.</p>
              review2 = &quot;This product is useful but not trending.&quot;,
              review3 = &quot;This product is awesome and is fancy.&quot;)
 cus_rev</code></pre>
+<pre><code>##                                    review1 
+##        &quot;This product is useful and fancy.&quot; 
+##                                    review2 
+## &quot;This product is useful but not trending.&quot; 
+##                                    review3 
+##    &quot;This product is awesome and is fancy.&quot;</code></pre>
 <p>These three toy reviews are easy enough for us to comprehend, but if
 we had thousands or millions of reviews, it would surely be useful to be
 able to take an automated count of how many times each word is used
@@ -1687,14 +1693,10 @@ this hypothetical tech product, there are a multitude of small steps
 that have to be made to clean the text data. Many of these steps were
 illustrated through tokenization in the pre-processing module and are
 performed on example corpus below.</p>
-<pre><code>```r
-# Create corpus
+<pre class="r"><code># Create corpus
 cus_rev_corp = corpus(cus_rev)
-cus_rev_corp
-```
-
-```
-## Corpus consisting of 3 documents.
+cus_rev_corp</code></pre>
+<pre><code>## Corpus consisting of 3 documents.
 ## review1 :
 ## &quot;This product is useful and fancy.&quot;
 ## 
@@ -1702,18 +1704,12 @@ cus_rev_corp
 ## &quot;This product is useful but not trending.&quot;
 ## 
 ## review3 :
-## &quot;This product is awesome and is fancy.&quot;
-```
-
-```r
-# Tokenize
+## &quot;This product is awesome and is fancy.&quot;</code></pre>
+<pre class="r"><code># Tokenize
 cus_rev_toks = tokens(cus_rev_corp, 
-                    remove_punct = TRUE)
-print(cus_rev_toks)
-```
-
-```
-## Tokens consisting of 3 documents.
+                        remove_punct = TRUE)
+print(cus_rev_toks)</code></pre>
+<pre><code>## Tokens consisting of 3 documents.
 ## review1 :
 ## [1] &quot;This&quot;    &quot;product&quot; &quot;is&quot;      &quot;useful&quot;  &quot;and&quot;     &quot;fancy&quot;  
 ## 
@@ -1721,8 +1717,7 @@ print(cus_rev_toks)
 ## [1] &quot;This&quot;     &quot;product&quot;  &quot;is&quot;       &quot;useful&quot;   &quot;but&quot;      &quot;not&quot;      &quot;trending&quot;
 ## 
 ## review3 :
-## [1] &quot;This&quot;    &quot;product&quot; &quot;is&quot;      &quot;awesome&quot; &quot;and&quot;     &quot;is&quot;      &quot;fancy&quot;
-```</code></pre>
+## [1] &quot;This&quot;    &quot;product&quot; &quot;is&quot;      &quot;awesome&quot; &quot;and&quot;     &quot;is&quot;      &quot;fancy&quot;</code></pre>
 <p>After tokenization, we can move to the next step: use
 <code>dfm()</code> to convert the corpus of documents to a
 document-feature matrix (DFM), which is simply a massive table where
@@ -2015,9 +2010,11 @@ features like “#trump2016” and “#makeamericagreatagain”, both of which
 have positive implications.</p>
 <p><br />
 </p>
-<p><strong>Question X. How might we improve the pre-processing steps to
+<hr />
+<p><strong>QUESTION X. How might we improve the pre-processing steps to
 create more meaningful output given our central research
 question?</strong></p>
+<hr />
 <p><br />
 </p>
 </div>
@@ -2085,7 +2082,10 @@ tweet_dfm_tfidf_grouped = dfm(tweet_toks) %&gt;%
 print(tweet_dfm_tfidf_grouped)</code></pre>
 <pre><code>## Document-feature matrix of: 2 documents, 0 features (0.00% sparse) and 1 docvar.</code></pre>
 <p><br />
-<strong>Question X: Oops, what went wrong here?</strong></p>
+</p>
+<hr />
+<p><strong>QUESTION X: Oops, what went wrong here?</strong></p>
+<hr />
 <p><br />
 </p>
 <p>Trying again:</p>

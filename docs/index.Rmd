@@ -47,11 +47,13 @@ getwd() # view working directory
 
 Let's take a simple toy example to explain how we can apply the bag of words model to the real life case. Here are three fictitious reviews about a particular tech product. Let's say we'd like to know how people think whether this product is worth buying by analyzing the words that are used most frequently by consumers.
 
-```{r, results = 'hide', message = FALSE}
+```{r, message = FALSE}
+
 cus_rev = c(review1 = "This product is useful and fancy.",
              review2 = "This product is useful but not trending.",
              review3 = "This product is awesome and is fancy.")
 cus_rev
+
 ```
 
 These three toy reviews are easy enough for us to comprehend, but if we had thousands or millions of reviews, it would surely be useful to be able to take an automated count of how many times each word is used overall, as well as whether these word frequencies vary by any meta data variables we might have, such as geographic location or age of the reviewer.
@@ -60,7 +62,7 @@ These three toy reviews are easy enough for us to comprehend, but if we had thou
 
 Before applying the bag of words model to our sample of reviews on this hypothetical tech product, there are a multitude of small steps that have to be made to clean the text data. Many of these steps were illustrated through tokenization in the pre-processing module and are performed on example corpus below. 
 
-    ```{r, message=F}
+```{r, message=F}
     
 # Create corpus
 cus_rev_corp = corpus(cus_rev)
@@ -94,7 +96,7 @@ colSums(cus_rev_dfm)
 
 `topfeatures()` in `quanteda` will provide the word frequencies for all the reviews in descending order. 
 
-    ```{r, message=F}
+```{r, message=F}
     
 # Get top features
 topfeatures(cus_rev_dfm, decreasing = TRUE)
@@ -259,7 +261,11 @@ By plotting the top 15 most frequent words used from Trump's Android and iPhone,
 
 \
 
-**Question X. How might we improve the pre-processing steps to create more meaningful output given our central research question?**
+---
+
+**QUESTION X. How might we improve the pre-processing steps to create more meaningful output given our central research question?**
+
+---
 
 \
 
@@ -307,9 +313,15 @@ print(tweet_dfm_tfidf_grouped)
 
 ```
 
+
 \
-    **Question X: Oops, what went wrong here?**
+
+---
+
+**QUESTION X: Oops, what went wrong here?**
     
+---
+
 \
 
 Trying again:
