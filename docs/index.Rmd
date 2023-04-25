@@ -25,7 +25,12 @@ knitr::opts_knit$set(root.dir = "/Users/cs86487/Dropbox/text-as-data-JUST-CORY-A
 ### Introduction
 
 The bag of words model is the prevailing approach to text representation. The fundamental concept is straightforward: we will represent each document by counting how many times each word appears in it. Think of taking all the words in a given document (or set of documents) of interest, and shaking them all up in a bag so they are no longer in order.
-<center>![](/Users/cs86487/Dropbox/text-as-data-JUST-CORY-AND-AMBER/modules/images/bag of words.png){width="60%"}</center>
+
+\
+
+<center>![](/Users/cs86487/Dropbox/text-as-data-JUST-CORY-AND-AMBER/modules/images/bag of words.png){width="70%"}</center>
+
+\
 
 In this module, we'll need the following packages:
 
@@ -38,6 +43,7 @@ require(quanteda.textstats)
 require(quanteda.textplots)
 library(stringr)
 library(ggplot2)
+library(ggpubr)
 
 # Set working directory
 setwd("/Users/cs86487/Dropbox/text-as-data-JUST-CORY-AND-AMBER/modules/data/")
@@ -57,6 +63,8 @@ cus_rev
 ```
 
 These three toy reviews are easy enough for us to comprehend, but if we had thousands or millions of reviews, it would surely be useful to be able to take an automated count of how many times each word is used overall, as well as whether these word frequencies vary by any meta data variables we might have, such as geographic location or age of the reviewer.
+
+\
 
 ### Create document frequency matrix (DFM)
 
@@ -91,6 +99,7 @@ colSums(cus_rev_dfm)
 
 ```
 
+\
 
 ### Calculate basic word frequencies
 
@@ -118,7 +127,7 @@ Now we'll apply the bag of words model to another example with more text data.
 
 During the 2016 presidential election campaigns, people noticed a peculiar trend. When then-presidential candidate Donald Trump posted positive tweets to Twitter, they came from an iPhone. When he posted negative tweets to Twitter, they came from an Android. Some speculated that Trump's Android and iPhone tweets were therefore written by different people. 
 
-David Robinson, the author of the book "R for text mining," collected Trump's tweets from 12/14/2015-08/08/2016 and found that Trump's Android tweets were angrier and more negative than iPhone tweets. Here, we are going to use the [Twitter data collected from David Robinson]((http://varianceexplained.org/r/trump-tweets/) to examine which words were most common among Android-posted and iPhone-posted tweets.
+David Robinson, the author of the book "R for text mining," collected Trump's tweets from 12/14/2015-08/08/2016 and found that Trump's Android tweets were angrier and more negative than iPhone tweets. Here, we are going to use the [Twitter data collected from David Robinson](http://varianceexplained.org/r/trump-tweets/) to examine which words were most common among Android-posted and iPhone-posted tweets.
 
 ```{r, message=FALSE}
 
@@ -165,10 +174,13 @@ head(tweet_toks)
 
 ```
 
-Some dfms are very large, involving hundreds of thousands of documents and millions of features. Features within those documents may be used rarely across the whole corpus, or used many times but only in a single document. Many text analysis methods do not infer meaning from terms mentioned very few times, and retaining all terms in really large corpora increases computational complexity (i.e., the time it takes to complete the task). Thus, the researcher has the option of "trimming" the dfm to exlude infrequent terms using `dfm_trim`. When used appropriately, trimming can decrease processing time without losing quality. In fact, reducing _sparseness_ or _sparsity_ in the matrix (i.e., the proportion of cells that have zero counts) is particularly important for more complex computational tasks in order to avoid overfitting and using memory.
+Some dfms are very large, involving hundreds of thousands of documents and millions of features. Features within those documents may be used rarely across the whole corpus, or used many times but only in a single document. Many text analysis methods do not infer meaning from terms mentioned very few times, and retaining all terms in really large corpora increases computational complexity (i.e., the time it takes to complete the task). 
 
-`min_termfreq` removes any features that occur less than _n_ times in the corpus (no matter the distribution across documents).
-`min_docfreq` removes any features that occur in less than _n_ times across _documents_. `docfreq_type` specifies a count or proportion.
+Thus, the researcher has the option of "trimming" the dfm to exlude infrequent terms using `dfm_trim`. When used appropriately, trimming can decrease processing time without losing quality. In fact, reducing _sparseness_ or _sparsity_ in the matrix (i.e., the proportion of cells that have zero counts) is particularly important for more complex computational tasks in order to avoid overfitting and using memory.
+
+* `min_termfreq` removes any features that occur less than _n_ times in the corpus (no matter the distribution across documents).
+* `min_docfreq` removes any features that occur in less than _n_ times across _documents_. 
+* `docfreq_type` (an option) specifies a count or proportion.
 
 Depending on the question, ubiquitous terms can also have little meaning. Quanteda offers a `max` equivalent of the above but we don't suggest using it as often, in part because common terms may not be distributed evenly across groups we care about.
 
@@ -195,6 +207,8 @@ print(tweet_dfm_trim)
 
 ```
 
+\
+
 ### Visualizing word frequencies
 
 After trimming (as appropriate), we can pipe the `textplot_wordcloud` function through `dfm`, grouping by source.
@@ -214,7 +228,7 @@ textplot_wordcloud(tweet_dfm_trim_source, comparison = TRUE, max_words = 200, co
 
 Alternatively, we can pipe the `textstat_frequency` function through `dfm`, grouping by source.
 
-```{r, message=F}
+```{r, message=F, fig.align='center', fig.width=10, fig.height=10}
 
 tweet_words_freq = dfm(tweet_dfm_trim) %>%
     textstat_frequency(groups = source) # grouping the term frequencies by source
@@ -222,9 +236,9 @@ head(tweet_words_freq)
 
 ```
 
-Let's plot top 15 more frequent words used in Trump's tweets from Android and from iPhone.
+Let's plot the top 15 more frequent words used in Trump's tweets from Android and from iPhone.
 
-```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
 
 # First create dfs with top 15 features
 android15_df = tweet_words_freq %>%
@@ -253,7 +267,8 @@ iphone15_plot = ggplot(data = iphone15_df, aes(x = reorder(feature, frequency), 
     coord_flip() +
     theme_bw()
 
-ggpubr::ggarrange(android15_plot, iphone15_plot)
+ggpubr::ggarrange(android15_plot, iphone15_plot) %>%
+  annotate_figure(top = text_grob("Top terms in Trump's Android and iPhone Tweets",  size = 14))
 
 ```
 
@@ -263,28 +278,48 @@ By plotting the top 15 most frequent words used from Trump's Android and iPhone,
 
 ---
 
-**QUESTION X. How might we improve the pre-processing steps to create more meaningful output given our central research question?**
+**Question 1.  Using the "immigration_news_1995-2017.csv" sample corpus, pre-process the corpus so it is ready for analysis using a bag of words model. List the top 15 most frequently occurring terms in these news articles. What do these words tell us about the documents in our corpus? Create a word cloud using the top terms.**
 
 ---
 
 \
 
 
-### Understanding and appling TF-IDF
+
+### Understanding and applying TF-IDF
+
+\
 
 <center>![](/Users/cs86487/Dropbox/text-as-data-JUST-CORY-AND-AMBER/modules/images/TF-IDF.jpeg){width="60%"}</center>
 
+\
+
 The example above used a bag-of-words approach to analyzing Trump's tweets, with the objective of taking a simple count of how many times each term appeared. 
 
-Let's see how things change if we use another bag-of-words approach with an alternative conceptualization of relative term importance or uniqueness:  TF-IDF (Term Frequency-Inverse Document Frequency). The general intuition of TF-IDF is that term frequency should increase with the number of times it appears in a document after its frequency across all documents is accounted for. TF-IDF accounts for the fact that some terms appear frequently across all documents, which makes the term less meaningful conceptually. It is calculated as follows:
+Let's see how things change if we use another bag-of-words approach with an alternative conceptualization of relative term importance or uniqueness:  TF-IDF (Term Frequency-Inverse Document Frequency). The general intuition of TF-IDF is that term frequency should increase with the number of times it appears in a document after its frequency across all documents is accounted for. TF-IDF accounts for the fact that some terms appear frequently across all documents, which makes the term less meaningful conceptually. It is calculated as follows, where $W_{ij}$ represents the term count relative to all document terms, $N$ represents the number of total documents, and $n_j$ represents the number of documents containing the term:
 
-TF = (# of times a term appears in a document) / (# of terms in a document) X
 
-IDF = Log[(# of documents) / (# of documents containing the word)] 
+<center>
+$tf-idf = W_{ij}*log\frac{N}{n_j}$
+</center>
+
+\
+
+<center>
+Alternatively,
+</center>
+
+\
+
+<center>
+**(# of times a term appears in a document/# of terms in a document) X (log(# of documents/# of documents containing the term)**
+</center>
+
+\
 
 `quanteda` uses the function `dfm_tfidf` to calculate TF-IDF. Let's first apply it to the whole tweet corpus.
 
-```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
 
 tweet_dfm_tfidf = dfm(tweet_toks) %>%
   dfm_trim(min_termfreq = 10, min_docfreq = 10, docfreq_type = "count")  %>% 
@@ -302,7 +337,7 @@ But what is the number of documents when we group? When we don't group?
 Let's first apply `dfm_tfidf` after we assign tweets to their source group.
 
 
-```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
 
 # Convert to grouped dfm, trim, and calculate tf-idf
 tweet_dfm_tfidf_grouped = dfm(tweet_toks) %>%
@@ -318,7 +353,7 @@ print(tweet_dfm_tfidf_grouped)
 
 ---
 
-**QUESTION X: Oops, what went wrong here?**
+**Question 2: Oops, what went wrong here?**
     
 ---
 
@@ -339,7 +374,7 @@ print(tweet_dfm_tfidf_grouped)
 
 By grouping, we now have only two documents. Just as we did for word frequency, let's observe and plot TF-IDF scores for Android and iPhone tweets. Note that `quanteda` requires the option `force=TRUE` to generate grouped frequencies. _Forcing_ something should give us pause. `quanteda`'s authors are telling us to use the option with caution! We'll see why momentarily.
 
-```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
 
 # Generate frequency lists
 tweet_tfidf_freq_grouped = dfm(tweet_dfm_tfidf_grouped) %>%
@@ -388,40 +423,47 @@ head(count(tweet_words_freq, frequency),5)
 
 ```
 
-The grouped TF-IDF approach produces 878/970 zeros (90% of all terms), whereas a zero value isn't present (or possible) for the word frequency approach. Why does this happen? Let's calculate the TF-IDF for a common term that appears in the `tweet_words_freq`, "crooked" in both Android and iPhone.
+The grouped TF-IDF approach produces 878/970 zeros (90% of all terms), whereas a zero value isn't present (or possible) for the word frequency approach. Why does this happen? Let's calculate the TF-IDF for a common term that appears in the `tweet_words_freq`, "crooked" in both Android and iPhone. Recall that TF-IDF is calculated as:
 
-TF = (# of times a term appears in a document) / (# of terms in a document) X
-IDF = Log[(# of documents) / (# of documents containing the word)]
+\
 
-CORY: WILL GET THE ACTUAL VALUES AS OPPOSED TO EXAMPLE AND MAKE FORMATTING BETTER
+<center>
+**(# of times a term appears in a document/# of terms in a document) X (log(# of documents/# of documents containing the term)**
+</center>
 
-*Android*
-
-TF = 100 / 600 X
-IDF = Log[(2 / 2)]
-
-TF = 0.167 X
-IDF = 0
-
-TF-IDF = 0
-
-*iPhone*
-
-TF = 50 / 650 X
-IDF = Log[(2 / 2)]
-
-TF = 0.167 X
-IDF = 0
-
-TF-IDF = 0
-
-Both result in 0! Why? Because we grouped our dfms by source, "crooked" shows up across _all two_ documents. IDF tells us that because the term shows up in both documents, it does not meaningfully distinguish Trump's tweets from Android versus tweets from iPhone and so makes the TF-IDF score 0. This inference is a little extreme given our question about relative differences between term usage across both sources.
-
-Yet we may learn something from the TF-IDF output. Because of the IDF component, terms captured in our plot are terms that _never_ show up in the opposing source; any term with a value greater than zero (e.g., "#makeamericagreatagain") isused in iPhone tweets but never Android (i.e., log(2/1)=0.69]. These rare terms seem to strengthen the inference that Android tweets were more negative than iPhone tweets. "Badly", "weak", and "crazy" are used in Android but not iPhone tweets, whereas hashtags with positive implications are used only in iPhone tweets. 
-
-To really understand the effect of grouping before calculating TF-IDF, let's now apply `dfm_tfidf` and group _after_ weights are assigned and plot.
+\
 
 ```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
+
+# Android
+print(android15_df)
+rowSums(tweet_dfm_trim_source)
+(93/3230)*log(2/2)
+
+# iPhone
+print(iphone15_df)
+rowSums(tweet_dfm_trim_source)
+(28/2391)*log(2/2)
+
+```
+
+Both result in 0! Why? Because we grouped our dfms by source, "crooked" shows up across _all two_ documents. IDF tells us that because the term shows up in both documents, it does not meaningfully distinguish Trump's tweets from Android versus tweets from iPhone and so makes the TF-IDF score 0. This inference is a little extreme given our question about relative differences between term usage across both sources. TF-IDF approaches oftentimes increase sparsity, adding zeros for terms that appear across all documents (or groups).
+
+Yet we can learn something from the TF-IDF output. Because of the IDF component, terms captured in our plot are terms that _never_ show up in the opposing source; any term with a value greater than zero (e.g., "#makeamericagreatagain") isused in iPhone tweets but never Android (i.e., log(2/1)=0.69]. These rare terms seem to strengthen the inference that Android tweets were more negative than iPhone tweets. "Badly", "weak", and "crazy" are used in Android but not iPhone tweets, whereas hashtags with positive implications are used only in iPhone tweets. 
+
+\
+
+---
+
+**Question 3. Notice the relatively small counts of top features in the basic word frequencies used to calculate TF-IDF. "Crooked" is a top feature in both groups, but account for less than 3% of the total terms stated in either case. Should we infer meaning from so few cases?**
+
+---
+
+\
+
+Returning to weighted approaches with groups, let's now apply `dfm_tfidf` and group _after_ weights are assigned and plot. 
+
+```{r, warning=FALSE, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
 
 # Using our ungrouped tfidf
 tweet_dfm_tfidf_freq = textstat_frequency(tweet_dfm_tfidf, groups = source, force=TRUE) 
@@ -467,8 +509,14 @@ Like most TAD approaches, there is often not a right or wrong way to use word fr
 
 So, were Trump's Android tweets more or less negative than Trump's iPhone tweets? If it were our research project, we'd probably use both word frequency, TF-IDF, and manual content analysis in descriptive inference. We'd also probably apply sentiment analysis instead of word frequency approaches, which we'll turn to next.
 
+\
 
+---
 
+**Question 4.  Now take a TF-IDF approach to the "immigration_news_1995-2017.csv" dfm you created and list the top 15 TF-IDF terms. What similarities or differences do you see between this list and the word frequency approach? Which approach do you think is more helpful, and why?**
 
+---
+
+\
 
 
