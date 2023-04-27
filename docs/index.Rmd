@@ -274,11 +274,12 @@ ggpubr::ggarrange(android15_plot, iphone15_plot) %>%
 
 By plotting the top 15 most frequent words used from Trump's Android and iPhone, we can see that "hillary", "crooked", and "bad" is mentioned more often in Android tweets than iPhone tweets. We also observe features like "#trump2016" and "#makeamericagreatagain", both of which have positive implications.
 
+
 \
 
 ---
 
-**Question 1.  Using the "immigration_news_1995-2017.csv" sample corpus, pre-process the corpus so it is ready for analysis using a bag of words model. List the top 15 most frequently occurring terms in these news articles. What do these words tell us about the documents in our corpus? Create a word cloud using the top terms.**
+**Question 1 (BREAKOUT).  Using the "immigration_news_1995-2017.csv" sample corpus, pre-process the corpus so it is ready for analysis using a bag of words model. List the top 15 most frequently occurring terms in these news articles. What do these words tell us about the documents in our corpus? Create a wordcloud using the top terms.**
 
 ---
 
@@ -455,7 +456,7 @@ Yet we can learn something from the TF-IDF output. Because of the IDF component,
 
 ---
 
-**Question 3. Notice the relatively small counts of top features in the basic word frequencies used to calculate TF-IDF. "Crooked" is a top feature in both groups, but account for less than 3% of the total terms stated in either case. Should we infer meaning from so few cases?**
+**Question 3. Notice the relatively small counts of top features in the basic word frequencies used to calculate TF-IDF. "Crooked" is a top feature in both groups, but account for less than 3% of the total terms stated in either case. Should we infer meaning from so few cases? What do you think?**
 
 ---
 
@@ -513,7 +514,11 @@ So, were Trump's Android tweets more or less negative than Trump's iPhone tweets
 
 ---
 
-**Question 4.  Now take a TF-IDF approach to the "immigration_news_1995-2017.csv" dfm you created and list the top 15 TF-IDF terms. What similarities or differences do you see between this list and the word frequency approach? Which approach do you think is more helpful, and why?**
+**Question 4 (BREAKOUT).  Now take a TF-IDF approach to the "immigration_news_1995-2017.csv" dfm you created and list the top 15 TF-IDF terms. What similarities or differences do you see between this list and the word frequency approach? Which approach do you think is more helpful, and why?**
+
+---
+
+**Question 5 (BREAKOUT). Consider the pre-processing steps we took. Are there alternative pre-processing steps that might improve the analysis? Discuss.**
 
 ---
 
