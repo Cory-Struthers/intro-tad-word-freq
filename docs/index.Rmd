@@ -176,13 +176,13 @@ head(tweet_toks)
 
 Some dfms are very large, involving hundreds of thousands of documents and millions of features. Features within those documents may be used rarely across the whole corpus, or used many times but only in a single document. Many text analysis methods do not infer meaning from terms mentioned very few times, and retaining all terms in really large corpora increases computational complexity (i.e., the time it takes to complete the task). 
 
-Thus, the researcher has the option of "trimming" the dfm to exlude infrequent terms using `dfm_trim`. When used appropriately, trimming can decrease processing time without losing quality. In fact, reducing _sparseness_ or _sparsity_ in the matrix (i.e., the proportion of cells that have zero counts) is particularly important for more complex computational tasks in order to avoid overfitting and using memory.
+Thus, the researcher has the option of "trimming" the dfm to exclude infrequent terms using `dfm_trim`. When used appropriately, trimming can decrease processing time without losing quality. In fact, reducing _sparseness_ or _sparsity_ in the matrix (i.e., the proportion of cells that have zero counts) is particularly important for more complex computational tasks in order to avoid over-fitting and using memory.
 
 * `min_termfreq` removes any features that occur less than _n_ times in the corpus (no matter the distribution across documents).
 * `min_docfreq` removes any features that occur in less than _n_ times across _documents_. 
 * `docfreq_type` (an option) specifies a count or proportion.
 
-Depending on the question, ubiquitous terms can also have little meaning. Quanteda offers a `max` equivalent of the above but we don't suggest using it as often, in part because common terms may not be distributed evenly across groups we care about.
+Depending on the question, ubiquitous terms can also have little meaning. `quanteda` offers a `max` equivalent of the above but we don't suggest using it as often, in part because common terms may not be distributed evenly across groups we care about.
 
 
 ```{r, message=F}
@@ -450,7 +450,7 @@ rowSums(tweet_dfm_trim_source)
 
 Both result in 0! Why? Because we grouped our dfms by source, "crooked" shows up across _all two_ documents. IDF tells us that because the term shows up in both documents, it does not meaningfully distinguish Trump's tweets from Android versus tweets from iPhone and so makes the TF-IDF score 0. This inference is a little extreme given our question about relative differences between term usage across both sources. TF-IDF approaches oftentimes increase sparsity, adding zeros for terms that appear across all documents (or groups).
 
-Yet we can learn something from the TF-IDF output. Because of the IDF component, terms captured in our plot are terms that _never_ show up in the opposing source; any term with a value greater than zero (e.g., "#makeamericagreatagain") isused in iPhone tweets but never Android (i.e., $log(2/1)=0.69$]. These rare terms seem to strengthen the inference that Android tweets were more negative than iPhone tweets. "Badly", "weak", and "crazy" are used in Android but not iPhone tweets, whereas hashtags with positive implications are used only in iPhone tweets. 
+Yet we can learn something from the TF-IDF output. Because of the IDF component, terms captured in our plot are terms that _never_ show up in the opposing source; any term with a value greater than zero (e.g., "#makeamericagreatagain") is used in iPhone tweets but never Android (i.e., $log(2/1)=0.69$]. These rare terms seem to strengthen the inference that Android tweets were more negative than iPhone tweets. "Badly", "weak", and "crazy" are used in Android but not iPhone tweets, whereas hashtags with positive implications are used only in iPhone tweets. 
 
 \
 

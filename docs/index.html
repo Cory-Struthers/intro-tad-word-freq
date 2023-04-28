@@ -1877,12 +1877,12 @@ single document. Many text analysis methods do not infer meaning from
 terms mentioned very few times, and retaining all terms in really large
 corpora increases computational complexity (i.e., the time it takes to
 complete the task).</p>
-<p>Thus, the researcher has the option of “trimming” the dfm to exlude
+<p>Thus, the researcher has the option of “trimming” the dfm to exclude
 infrequent terms using <code>dfm_trim</code>. When used appropriately,
 trimming can decrease processing time without losing quality. In fact,
 reducing <em>sparseness</em> or <em>sparsity</em> in the matrix (i.e.,
 the proportion of cells that have zero counts) is particularly important
-for more complex computational tasks in order to avoid overfitting and
+for more complex computational tasks in order to avoid over-fitting and
 using memory.</p>
 <ul>
 <li><code>min_termfreq</code> removes any features that occur less than
@@ -1894,9 +1894,9 @@ than <em>n</em> times across <em>documents</em>.</li>
 proportion.</li>
 </ul>
 <p>Depending on the question, ubiquitous terms can also have little
-meaning. Quanteda offers a <code>max</code> equivalent of the above but
-we don’t suggest using it as often, in part because common terms may not
-be distributed evenly across groups we care about.</p>
+meaning. <code>quanteda</code> offers a <code>max</code> equivalent of
+the above but we don’t suggest using it as often, in part because common
+terms may not be distributed evenly across groups we care about.</p>
 <pre class="r"><code># min_termfreq = 15
 tweet_dfm = dfm(tweet_toks) 
 print(tweet_dfm)</code></pre>
@@ -2273,7 +2273,7 @@ for terms that appear across all documents (or groups).</p>
 <p>Yet we can learn something from the TF-IDF output. Because of the IDF
 component, terms captured in our plot are terms that <em>never</em> show
 up in the opposing source; any term with a value greater than zero
-(e.g., “#makeamericagreatagain”) isused in iPhone tweets but never
+(e.g., “#makeamericagreatagain”) is used in iPhone tweets but never
 Android (i.e., <span class="math inline">\(log(2/1)=0.69\)</span>].
 These rare terms seem to strengthen the inference that Android tweets
 were more negative than iPhone tweets. “Badly”, “weak”, and “crazy” are
